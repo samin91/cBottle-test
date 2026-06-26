@@ -14,10 +14,10 @@ source /home/k/k202223/cBottle/.venv/bin/activate
 export V6_ICON_ZARR=/work/kd1453/rechunked_ngc3028/ngc3028_PT3H_6.zarr
 export RAW_DATA_URL=/work/kd1453/rechunked_ngc3028/ngc3028_PT30M_10.zarr
 export LAND_DATA_URL_6=/work/kd1453/rechunked_ngc3028/ngc3028_P1D_6.zarr
-export SST_MONMEAN_DATA_URL_6=/work/bk1444/k202222/ressources_cBottle/datasets/ngc3028_P1D_ts_monmean_6_renamed.zarr
+export SST_MONMEAN_DATA_URL_6=/work/bk1444/k202222/resources_cBottle/datasets/ngc3028_P1D_ts_monmean_6_renamed.zarr
 
 python3 scripts/train_coarse.py \
-    --output_dir <insert-path-to-workspace>/cBottle/output/training_coarse_inference \
+    --output_dir /home/k/k202223/cBottle/output/training_coarse_inference \
     --loop.total_ticks 80 \
     --loop.steps_per_tick 30 \
     --loop.snapshot_ticks 6 \
