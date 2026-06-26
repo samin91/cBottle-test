@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 site_name: Climate in a Bottle
-site_url: https://nvlabs.github.io/cbottle/
-repo_url: https://github.com/nvlabs/cbottle
+site_url: https://samin91.github.io/cBottle-test/
+repo_url: https://github.com/samin91/cBottle-test
 site_author: NVIDIA
 nav: 
   - Home: index.md
