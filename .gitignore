@@ -179,6 +179,8 @@ output/
 logs/
 checkpoints/
 
+# HPC job scripts (contain account/path info specific to local HPC setup)
+*.sh
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
