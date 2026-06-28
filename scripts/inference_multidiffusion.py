@@ -227,7 +227,7 @@ def inference(arg_list=None, customized_dataset=None):
             else:
                 inp = batch["condition"]
                 inp = inp
-                lr = inp[0, :, 0].to(device) # claude recommended! 
+                lr = inp[0, :, 0].to(device)  # claude recommended!
                 inp = inp.cuda(non_blocking=True)
         if args.save_data:
             pred = target[None, :, None]
