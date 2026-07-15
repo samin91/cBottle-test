@@ -178,6 +178,7 @@ pyrightconfig.json
 output/
 logs/
 checkpoints/
+wandb/
 
 # HPC job scripts (contain account/path info specific to local HPC setup)
 *.sh
