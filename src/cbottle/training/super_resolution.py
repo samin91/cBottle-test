@@ -274,6 +274,18 @@ def train(
     WORLD_RANK = cbottle_dist.get_rank()
 
     os.makedirs(output_path, exist_ok=True)
+
+    # Initialize wandb for logging
+    if WORLD_RANK == 0:
+        import wandb
+        wandb.init(
+            project="cbottle-sr-era5",
+            name=os.path.basename(output_path.rstrip("/")),
+            config=dict(lr_level=lr_level, train_batch_size=train_batch_size,
+                        test_batch_size=test_batch_size, num_steps=num_steps),
+            resume="allow",
+        )
+    
     training_sampler = None
     test_sampler = None
     # dataloader
@@ -453,6 +465,17 @@ def train(
                                 / WORLD_SIZE
                                 / test_batch_size
                             )
+                            # log to wandb
+                            wandb.log(
+                                {
+                                    "loss/train": train_loss_list[-1],
+                                    "loss/val": float(val_loss_list[-1]),
+                                    "grad_norm": float(grad_norm),
+                                    "lr": optimizer.param_groups[0]["lr"],
+                                },
+                                step=step,
+                            )
+                            
                             pos = net.module.model.pos_embed.detach().clone()
                             for name, para in net.named_parameters():
                                 if "enc.128x128_conv.weight" in name:
