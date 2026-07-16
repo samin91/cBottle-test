@@ -1,8 +1,10 @@
 import numpy as np
 import torch.distributed as dist
+import xarray as xr 
 import cbottle.datasets.zarr_loader as zl
 import cbottle.datasets.merged_dataset as md
 from earth2grid import healpix
+import pdb
 
 ROOT = "/work/bk1444/climbench/data/experiment1/healpix"
 FIELDS = ["tas"]
@@ -30,6 +32,12 @@ def dataset_wrapper(*, split: str = "train"):
         variables_3d=[],
         levels=[],
     )
+    # New data stores time as numeric + calendar="proleptic_gregorian", which
+    # ZarrLoader decodes into a CFTimeIndex of cftime objects. merged_dataset.py's
+    # pd.Timestamp(time) can't consume those directly, so convert here.
+    if isinstance(loader.times, xr.CFTimeIndex):
+        loader.times = loader.times.to_datetimeindex()
+
     rank = dist.get_rank() if dist.is_initialized() else 0
     world = dist.get_world_size() if dist.is_initialized() else 1
     ds = md.TimeMergedDataset(

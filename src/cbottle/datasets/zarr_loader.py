@@ -22,6 +22,7 @@ import numpy as np
 import urllib.parse
 import logging
 
+import pdb
 
 NO_LEVEL = -1
 
@@ -43,13 +44,12 @@ async def _getitem(array, index):
             indexer = i
             ok = slice(None)
 
-    chunk = await array.getitem((indexer, *index))
+    chunk = await array.getitem((indexer, *index)) # Loads data from disk asynchronously
     return chunk[ok]
 
 
 class ZarrLoader:
     """Load 2d and 3d data from a zarr dataset"""
-
     def __init__(
         self,
         *,
@@ -65,6 +65,7 @@ class ZarrLoader:
         Args:
             time_sel_method: passed to pd.Index.get_indexer(method=)
         """
+        
         self.time_sel_method = time_sel_method
         self.variables_2d = variables_2d
         self.variables_3d = variables_3d
@@ -79,14 +80,14 @@ class ZarrLoader:
             zarr.api.asynchronous.open_group(
                 path, storage_options=storage_options, use_consolidated=True, mode="r"
             )
-        )
+        ) # NOTE: opens the dataset and reads the metadata, but does not load the data into memory yet.
 
         self.inds = None
         if self.variables_3d:
             self.inds = sync(self._get_vertical_indices(level_coord_name, levels))
 
         self._arrays = {}
-        time_num, self.units, self.calendar = sync(self._get_time())
+        time_num, self.units, self.calendar = sync(self._get_time()) # NOTE: reads the time coordinate.
         if np.issubdtype(time_num.dtype, np.datetime64):
             self.times = pd.DatetimeIndex(time_num)
         else:
