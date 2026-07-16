@@ -29,6 +29,7 @@ from cbottle.datasets import samplers
 from cbottle.datasets.dataset_2d import HealpixDatasetV5
 from cbottle import distributed as cbottle_dist
 
+import pdb
 
 class EDMLossSR:
     def __init__(
@@ -340,9 +341,9 @@ def train(
     out_channels = len(training_dataset.fields_out)
 
     # the model takes in both local and global lr channels
-    local_lr_channels = out_channels
-    global_lr_channels = out_channels
-    model_config = cbottle.models.ModelConfigV1(
+    local_lr_channels = out_channels # NOTE (samin): what are these?
+    global_lr_channels = out_channels # NOTE (samin): what are these?
+    model_config = cbottle.models.ModelConfigV1(  # NOTE (samin): how is it possible to import like this?
         architecture="unet_hpx1024_patch",
         condition_channels=local_lr_channels + global_lr_channels,
         out_channels=out_channels,
@@ -356,7 +357,7 @@ def train(
         net, device_ids=[LOCAL_RANK], find_unused_parameters=False
     )
 
-    patch_iterator = BatchedPatchIterator(
+    patch_iterator = BatchedPatchIterator( # NOTE (samin): what is this? what does it do exactly?
         net,
         training_dataset.grid,
         lr_level,
@@ -412,7 +413,6 @@ def train(
 
     if WORLD_RANK == 0:
         print("training begin...", flush=True)
-
     while True:
         for batch in training_loader:
             for lpe, ltarget, llr in patch_iterator(batch, train_batch_size):
@@ -564,6 +564,20 @@ def train(
                                 step=step,
                                 loss=train_loss_list,
                             )
+
+                            # keep only the N most recent checkpoints to avoid
+                            # filling the home directory quota
+                            keep_last_n = 5
+                            existing = sorted(
+                                (
+                                    f for f in os.listdir(output_path)
+                                    if f.startswith("cBottle-SR-") and f.endswith(".zip")
+                                ),
+                                key=lambda f: int(f.split("-")[-1].split(".")[0]),
+                            )
+                            for old_file in existing[:-keep_last_n]:
+                                os.remove(os.path.join(output_path, old_file))
+                            
                             running_loss = 0.0
 
                 if step >= num_steps:
