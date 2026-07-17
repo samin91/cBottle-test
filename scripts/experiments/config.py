@@ -21,21 +21,40 @@ EXPERIMENTS: dict[str, ExperimentConfig] = {
         name="experiment1",
         root="/work/bk1444/climbench/data/experiment1/healpix",
         fields=["tas"],
-        mean={"tas": 286.9937438964844},
-        scale={"tas": 15.424193382263184},
+        mean={"tas": 286.99915542783003}, 
+        scale={"tas": 15.414200571501576},
     ),
     "experiment2": ExperimentConfig(
         name="experiment2",
         root="/work/bk1444/climbench/data/experiment2/healpix",  # TODO: confirm actual path
-        fields=["pt"],  # corrected from table's "pr" — verified against real data
-        mean={"pt": None},   # TODO: compute — see script below
-        scale={"pt": None},  # TODO: compute
+        fields=["tp"],  # corrected from table's "pr" — verified against real data
+        mean={"tp": 0.0028682559418698973},  
+        scale={"tp": 0.006175653414683115},  
     ),
     "experiment3": ExperimentConfig(
         name="experiment3",
         root="/work/bk1444/climbench/data/experiment3/healpix",  # TODO: confirm actual path
         fields=["msl", "q850", "tas", "tcc", "tp", "u850", "v850", "z500"],
-        mean={v: None for v in ["tp", "2t", "hus", "tcc", "z500", "v850", "u850", "msl"]},   # TODO
-        scale={v: None for v in ["tp", "2t", "hus", "tcc", "z500", "v850", "u850", "msl"]},  # TODO
+        mean={
+            "msl": 101139.39094338276,
+            "q850": 0.005964962388804392,
+            "tas": 286.99915542783003,
+            "tcc": 0.6229747817337858,
+            "tp": 0.0028682559418698973,
+            "u850": 1.1146329207266692,
+            "v850": 0.09364891663880362,
+            "z500": 55433.52487005346,
+        },
+        scale={
+            "msl": 1062.9293798393428,
+            "q850": 0.004028018112375323,
+            "tas": 15.414200571501576,
+            "tcc": 0.3009191133842002,
+            "tp": 0.006175653414683115,
+            "u850": 7.60048045817027,
+            "v850": 5.052339021547254,
+            "z500": 2704.6219155593317,
+        },
+        
     ),
 }
