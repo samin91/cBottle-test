@@ -7,13 +7,30 @@ from experiments.healpix_dataset import make_dataset_wrapper
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--experiment", required=True, choices=EXPERIMENTS.keys())
-    parser.add_argument("--output-path", required=True)
-    parser.add_argument("--log-freq", type=int, default=100)
-    parser.add_argument("--lr-level", type=int, default=6)
-    parser.add_argument("--train-batch-size", type=int, default=15)
-    parser.add_argument("--test-batch-size", type=int, default=30)
-    parser.add_argument("--dataloader-num-workers", type=int, default=3)
-    parser.add_argument("--bf16", action="store_true")
+    parser.add_argument(
+        "--output-path", type=str, required=True, help="output directory"
+    )
+    parser.add_argument(
+        "--log-freq", type=int, default=100, help="Log every N steps (default: 100)"
+    )
+    parser.add_argument(
+        "--lr-level", type=int, default=6, help="HPX level of the low-resolution map"
+    )
+    parser.add_argument(
+        "--train-batch-size", type=int, default=15, help="training batch size per GPU"
+    )
+    parser.add_argument(
+        "--test-batch-size", type=int, default=30, help="validation batch size per GPU"
+    )
+    parser.add_argument(
+        "--dataloader-num-workers",
+        type=int,
+        default=3,
+        help="number of workers for training dataloader",
+    )
+    parser.add_argument(
+        "--bf16", action="store_true", help="use bfloat16 precision"
+    )
     return parser.parse_args()
 
 
