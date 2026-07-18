@@ -8,7 +8,7 @@ class ExperimentConfig:
     fields: list[str]
     mean: dict[str, float]
     scale: dict[str, float]
-    train_dir: str = "target_train"
+    train_dir: str = "target_train"       # only target is needed. Input is computed from target. 
     val_dir: str = "target_validation"   # aliased as "test" during training
     real_test_dir: str = "target_test"   # only touched by evaluate_test.py
     grid_level: int = 7
@@ -26,14 +26,14 @@ EXPERIMENTS: dict[str, ExperimentConfig] = {
     ),
     "experiment2": ExperimentConfig(
         name="experiment2",
-        root="/work/bk1444/climbench/data/experiment2/healpix",  # TODO: confirm actual path
-        fields=["tp"],  # corrected from table's "pr" — verified against real data
+        root="/work/bk1444/climbench/data/experiment2/healpix",  
+        fields=["tp"],  
         mean={"tp": 0.0028682559418698973},  
         scale={"tp": 0.006175653414683115},  
     ),
     "experiment3": ExperimentConfig(
         name="experiment3",
-        root="/work/bk1444/climbench/data/experiment3/healpix",  # TODO: confirm actual path
+        root="/work/bk1444/climbench/data/experiment3/healpix",  
         fields=["msl", "q850", "tas", "tcc", "tp", "u850", "v850", "z500"],
         mean={
             "msl": 101139.39094338276,
